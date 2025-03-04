@@ -40,7 +40,7 @@ app.get('/',(req,res)=>{
 
 app.get('/list',async(req,res)=>{
     const lists = await list.find()
-    res.send(lists)
+    res.json(lists)
 })
 
 app.get('/list/:id', async(req,res)=>{
