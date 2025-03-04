@@ -25,10 +25,15 @@ const list = mongoose.model("items",productSchema)
 
 const connectDB = async()=>{
     try{
-        await mongoose.connect(MONGOURL)
+        await mongoose.connect(MONGOURL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            serverSelectionTimeoutMS: 5000,
+        });
         console.log("✅ database is connected successfully")
     }catch(err){
         console.log("❌ database is failed to connect: ",err)
+        process.exit(1)
     }
 }
 
@@ -38,10 +43,17 @@ app.get('/',(req,res)=>{
     res.send("hello every one this is Hailegebriel !")
 })
 
-app.get('/list',async(req,res)=>{
-    const lists = await list.find()
-    res.json(lists)
-})
+app.get('/list', async (req, res) => {
+    try {
+        const lists = await list.find();
+        if (!lists.length) {
+            return res.status(404).json({ message: "No items found" });
+        }
+        res.status(200).json(lists);
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+});
 
 app.get('/list/:id', async(req,res)=>{
     const item = await list.findById(req.params.id);
