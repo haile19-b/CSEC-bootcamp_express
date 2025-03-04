@@ -35,7 +35,7 @@ const connectDB = async()=>{
 connectDB();
 
 app.get('/',(req,res)=>{
-    res.send("hello every one this is Haile")
+    res.send("hello every one this is Hailegebriel !")
 })
 
 app.get('/list',async(req,res)=>{
